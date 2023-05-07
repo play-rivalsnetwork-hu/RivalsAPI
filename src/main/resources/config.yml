@@ -1,0 +1,13 @@
+storage:
+  address: ""
+  database: ""
+  username: ""
+  password: ""
+  pool-settings:
+    maximum-pool-size: 10
+    minimum-idle: 10
+    maximum-lifetime: 1800000
+    keepalive-time: 0
+    connection-timeout: 5000
+
+config-version: 1
