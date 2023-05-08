@@ -1,6 +1,5 @@
 package hu.rivalsnetwork.rivalsapi.utils;
 
-import hu.rivalsnetwork.rivalsapi.storage.Storage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -8,6 +7,8 @@ import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StringUtils {
     private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder().character('\u00a7').useUnusualXRepeatedCharacterHexFormat().hexColors().build();
@@ -19,6 +20,11 @@ public class StringUtils {
         message = ChatColor.translateAlternateColorCodes('&', message);
 
         return message;
+    }
+
+    @NotNull
+    public static Component formatToComponent(@NotNull String message) {
+        return toComponent(format(message));
     }
 
     public static @NotNull String toLegacy(@NotNull Component component) {
@@ -35,9 +41,6 @@ public class StringUtils {
             if (arg == null) continue;
             message = message.replaceFirst("([{}])", arg.toString());
         }
-        Storage.connect(connection -> {
-            connection.prepareStatement("asd");
-        });
 
         return message;
     }
@@ -51,5 +54,25 @@ public class StringUtils {
         long seconds = total % 60;
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    @NotNull
+    public static List<String> formatList(@NotNull List<String> list) {
+        List<String> toReturn = new ArrayList<>(list.size());
+        for (String line : list) {
+            toReturn.add(StringUtils.format(line));
+        }
+
+        return toReturn;
+    }
+
+    @NotNull
+    public static List<Component> formatListToComponent(@NotNull List<String> list) {
+        List<Component> toReturn = new ArrayList<>(list.size());
+        for (String line : list) {
+            toReturn.add(StringUtils.toComponent(StringUtils.format(line)));
+        }
+
+        return toReturn;
     }
 }

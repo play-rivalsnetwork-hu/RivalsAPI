@@ -1,16 +1,24 @@
 package hu.rivalsnetwork.rivalsapi;
 
+import hu.rivalsnetwork.rivalsapi.serializer.impl.LocationSerializer;
 import hu.rivalsnetwork.rivalsapi.users.User;
 import hu.rivalsnetwork.rivalsapi.users.Users;
+import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
+import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-class RivalsAPI {
+public class RivalsAPI {
     private final RivalsAPIPlugin plugin;
+    private static Scheduler scheduler;
+    private static MessageUtils messageUtils;
+    private final LocationSerializer locationSerializer = new LocationSerializer();
 
     public RivalsAPI(RivalsAPIPlugin plugin) {
         this.plugin = plugin;
+        scheduler = new Scheduler(plugin);
+        messageUtils = new MessageUtils(plugin.lang().getHandle());
     }
 
     public static User getUser(UUID uuid) {
@@ -19,5 +27,17 @@ class RivalsAPI {
 
     public static User getUser(Player player) {
         return Users.getUser(player);
+    }
+
+    public LocationSerializer getLocationSerializer() {
+        return this.locationSerializer;
+    }
+
+    public static Scheduler scheduler() {
+        return scheduler;
+    }
+
+    public static MessageUtils messageUtils() {
+        return messageUtils;
     }
 }
