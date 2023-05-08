@@ -23,4 +23,4 @@ jobs:
       uses: actions/upload-artifact@v3   
       with:
         name: RivalsAPI
-        path: build/libs/RivalsAPI-1.0-SNAPSHOT-dev-all.jar
+        path: build/libs/RivalsAPI-1.0-SNAPSHOT.jar
