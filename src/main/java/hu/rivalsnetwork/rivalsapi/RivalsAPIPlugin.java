@@ -1,5 +1,9 @@
 package hu.rivalsnetwork.rivalsapi;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIConfig;
+import hu.rivalsnetwork.rivalsapi.commands.Command;
 import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.config.ConfigYML;
 import hu.rivalsnetwork.rivalsapi.config.LangYML;
@@ -25,6 +29,11 @@ public class RivalsAPIPlugin extends JavaPlugin {
     }
 
     @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+    }
+
+    @Override
     public void onEnable() {
         instance = this;
         api = new RivalsAPI(this);
@@ -36,6 +45,14 @@ public class RivalsAPIPlugin extends JavaPlugin {
         Users.load();
 
         Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
+
+        CommandAPI.onEnable();
+        Command.registerAllCommands();
+    }
+
+    @Override
+    public void onDisable() {
+        CommandAPI.onDisable();
     }
 
     public Config getConfiguration() {

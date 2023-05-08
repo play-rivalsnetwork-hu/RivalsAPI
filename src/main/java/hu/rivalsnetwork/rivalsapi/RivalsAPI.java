@@ -21,11 +21,11 @@ public class RivalsAPI {
         messageUtils = new MessageUtils(plugin.lang().getHandle());
     }
 
-    public static User getUser(UUID uuid) {
+    public User getUser(UUID uuid) {
         return Users.getUser(uuid);
     }
 
-    public static User getUser(Player player) {
+    public User getUser(Player player) {
         return Users.getUser(player);
     }
 
@@ -33,11 +33,11 @@ public class RivalsAPI {
         return this.locationSerializer;
     }
 
-    public static Scheduler scheduler() {
+    public Scheduler scheduler() {
         return scheduler;
     }
 
-    public static MessageUtils messageUtils() {
+    public MessageUtils messageUtils() {
         return messageUtils;
     }
 }
