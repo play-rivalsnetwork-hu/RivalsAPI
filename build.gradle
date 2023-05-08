@@ -26,12 +26,14 @@ repositories {
     maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 
+
 tasks {
     compileJava {
         options.encoding = 'UTF-8'
         options.release.set(17)
     }
 }
+
 
 dependencies {
     paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:1.19.4-R0.1-SNAPSHOT")
