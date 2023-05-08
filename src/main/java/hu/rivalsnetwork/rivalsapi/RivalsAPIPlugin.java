@@ -36,10 +36,10 @@ public class RivalsAPIPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        api = new RivalsAPI(this);
-
         config = new ConfigYML();
         lang = new LangYML();
+
+        api = new RivalsAPI(this);
         new Storage(this);
 
         Users.load();

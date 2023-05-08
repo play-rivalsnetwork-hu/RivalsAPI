@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Build
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -23,4 +23,4 @@ jobs:
       uses: actions/upload-artifact@v3   
       with:
         name: RivalsAPI
-        path: build/libs/RivalsAPI-1.0-SNAPSHOT
+        path: build/libs/RivalsAPI-1.0-SNAPSHOT-dev-all.jar

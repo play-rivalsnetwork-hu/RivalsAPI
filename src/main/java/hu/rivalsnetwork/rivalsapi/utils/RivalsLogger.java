@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RivalsLogger {
-    private static final Logger logger = Logger.getLogger("RivalsAPI");
+    private static final Logger logger = Logger.getLogger("RivalsAPILogger");
 
     public static void warn(String message, Object... args) {
         logger.warning(StringUtils.formatPlaceholders(message, args));

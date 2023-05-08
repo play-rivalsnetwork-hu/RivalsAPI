@@ -39,7 +39,7 @@ public class StringUtils {
         if (args == null) return message;
         for (Object arg : args) {
             if (arg == null) continue;
-            message = message.replaceFirst("([{}])", arg.toString());
+            message = org.apache.commons.lang3.StringUtils.replaceOnce(message, "{}", arg.toString());
         }
 
         return message;

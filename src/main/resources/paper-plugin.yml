@@ -1,7 +1,6 @@
 name: RivalsAPI
 version: '0.1'
 main: hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin
-bootstrapper: hu.rivalsnetwork.rivalsapi.Bootstrap
 description: Paper Test Plugin
 api-version: '1.19'
 

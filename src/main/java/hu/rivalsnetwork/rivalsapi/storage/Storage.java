@@ -14,6 +14,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.config.Config;
+import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import hu.rivalsnetwork.rivalsapi.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
