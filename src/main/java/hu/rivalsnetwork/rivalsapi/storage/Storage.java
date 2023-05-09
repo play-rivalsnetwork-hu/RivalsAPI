@@ -10,7 +10,10 @@
  */
 package hu.rivalsnetwork.rivalsapi.storage;
 
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
 import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -19,10 +22,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.utils.StringUtils;
+import org.bson.UuidRepresentation;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 
 public class Storage {
     private static final HikariConfig config = new HikariConfig();
@@ -53,10 +58,14 @@ public class Storage {
 
             dataSource = new HikariDataSource(config);
         } else {
-            String authParams = configYML.getString("storage.username") + ":" + configYML.getString("storage.password") + "@";
-            String authSource = "/?authSource=" + configYML.getString("storage.database");
-            String uri = "mongodb://" + authParams + configYML.getString("storage.address") + ":27017" + authSource;
-            client = MongoClients.create(uri);
+            ServerAddress address = new ServerAddress(configYML.getString("storage.address"), 27017);
+            MongoCredential credential = MongoCredential.createCredential(configYML.getString("storage.username"), configYML.getString("storage.database"), configYML.getString("storage.password").toCharArray());
+            MongoClientSettings settings = MongoClientSettings.builder()
+                    .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+                    .credential(credential)
+                    .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(address))).build();
+
+            client = MongoClients.create(settings);
         }
     }
 

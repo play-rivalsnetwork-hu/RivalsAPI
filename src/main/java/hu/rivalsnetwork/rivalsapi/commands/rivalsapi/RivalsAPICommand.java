@@ -2,11 +2,9 @@ package hu.rivalsnetwork.rivalsapi.commands.rivalsapi;
 
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.LiteralArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.commands.Command;
 import hu.rivalsnetwork.rivalsapi.users.User;
-import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
 
 import java.util.Map;
 

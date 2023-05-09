@@ -4,6 +4,7 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandAPIConfig;
 import hu.rivalsnetwork.rivalsapi.commands.Command;
+import hu.rivalsnetwork.rivalsapi.commands.rivalsapi.RivalsAPICommand;
 import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.config.ConfigYML;
 import hu.rivalsnetwork.rivalsapi.config.LangYML;
@@ -47,6 +48,7 @@ public class RivalsAPIPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
 
         CommandAPI.onEnable();
+        new RivalsAPICommand();
         Command.registerAllCommands();
     }
 
