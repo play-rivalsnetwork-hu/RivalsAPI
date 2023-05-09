@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Command {
-    private static final List<Command> registerableCommands = new ArrayList<>();
+    public static final List<Command> registerableCommands = new ArrayList<>(256);
+    private static final List<String> commands = new ArrayList<>(256);
 
-    public Command() {
-        registerableCommands.add(this);
+    public Command(String name) {
+        commands.add(name);
     }
 
     public abstract void register();

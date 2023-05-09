@@ -68,7 +68,7 @@ public class Storage {
         }
     }
 
-    public static void connect(@NotNull MongoCallback callback) {
+    public static void mongo(@NotNull MongoCallback callback) {
         try {
             callback.accept(client.getDatabase(RivalsAPIPlugin.getConfiguration().getString("storage.database")));
         } catch (MongoException exception) {

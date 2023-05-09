@@ -12,6 +12,11 @@ import java.util.Map;
 
 public class RivalsAPICommand extends Command {
 
+    public RivalsAPICommand() {
+        super("rivalsapi");
+        registerableCommands.add(this);
+    }
+
     @Override
     public void register() {
         new CommandTree("rivalsapi")
