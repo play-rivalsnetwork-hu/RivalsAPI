@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Map;
 
+// Thanks to: https://www.spigotmc.org/threads/loading-pasting-schematics-without-worldedit.543692/
 public class Schematic {
     private short width;
     private short height;
