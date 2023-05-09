@@ -10,4 +10,5 @@ storage:
     keepalive-time: 0
     connection-timeout: 5000
 
-config-version: 1
+mongodb: true
+config-version: 2

@@ -1,3 +1,4 @@
 prefix: "&b&lRivalsAPI &7| "
-
-config-version: 1
+reload: "&aSikeres újratöltés! &7(&f%time% ms&7)"
+version: "&fKilensverziód: &a%version%!"
+config-version: 2

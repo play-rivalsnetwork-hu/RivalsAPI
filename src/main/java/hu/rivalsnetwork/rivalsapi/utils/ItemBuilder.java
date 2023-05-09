@@ -1,12 +1,8 @@
 package hu.rivalsnetwork.rivalsapi.utils;
 
-import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import hu.rivalsnetwork.rivalsapi.RivalsAPI;
-import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
-import hu.rivalsnetwork.rivalsapi.utils.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -17,10 +13,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Locale;
 
 public class ItemBuilder {
 
@@ -75,7 +72,7 @@ public class ItemBuilder {
 
     @NotNull
     public static Map<Enchantment, Integer> createEnchantmentsMap(@NotNull List<String> enchantments) {
-        final Map<Enchantment, Integer> enchantsMap = Maps.newHashMap();
+        final Map<Enchantment, Integer> enchantsMap = new HashMap<>(enchantments.size());
 
         for (String enchantment : enchantments) {
             String[] enchant = enchantment.split(":");

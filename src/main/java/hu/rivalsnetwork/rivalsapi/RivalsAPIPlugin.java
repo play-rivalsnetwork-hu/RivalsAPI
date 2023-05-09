@@ -55,7 +55,7 @@ public class RivalsAPIPlugin extends JavaPlugin {
         CommandAPI.onDisable();
     }
 
-    public Config getConfiguration() {
+    public static Config getConfiguration() {
         return config;
     }
 
