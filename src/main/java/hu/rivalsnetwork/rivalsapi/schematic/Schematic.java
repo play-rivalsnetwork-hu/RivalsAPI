@@ -40,7 +40,7 @@ public class Schematic {
         }
     }
 
-    public void paste(@NotNull final Location location) {
+    public void paste(@NotNull final Location location, boolean setAir) {
         int mutatedX;
         int mutatedY;
         int mutatedZ;
@@ -56,7 +56,11 @@ public class Schematic {
                         int i = ((IntTag) palette.get(data)).getAsInt();
 
                         if (blockData[index] == i) {
-                            setBlock(location.getWorld(), mutatedX, mutatedY, mutatedZ, Bukkit.createBlockData(data));
+                            BlockData bData = Bukkit.createBlockData(data);
+
+                            if (setAir || (!setAir && !bData.getMaterial().isAir())) {
+                                setBlock(location.getWorld(), mutatedX, mutatedY, mutatedZ, bData);
+                            }
                         }
                     }
                 }

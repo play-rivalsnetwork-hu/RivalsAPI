@@ -53,14 +53,14 @@ public class MessageUtils {
 
     public  void sendLang(@NotNull CommandSender sender, @NotNull String key, @NotNull Map<String, String> replacements) {
         AtomicReference<String> message = new AtomicReference<>(file.getString(key));
-        replacements.forEach((pattern, replacement) -> message.set(message.get().replace(key, replacement)));
+        replacements.forEach((pattern, replacement) -> message.set(message.get().replace(pattern, replacement)));
 
         sender.sendMessage(StringUtils.format(file.getString("prefix")) + StringUtils.format(message.get()));
     }
 
     public  void sendLang(@NotNull Player player, @NotNull String key, @NotNull Map<String, String> replacements) {
         AtomicReference<String> message = new AtomicReference<>(file.getString(key));
-        replacements.forEach((pattern, replacement) -> message.set(message.get().replace(key, replacement)));
+        replacements.forEach((pattern, replacement) -> message.set(message.get().replace(pattern, replacement)));
 
         player.sendMessage(StringUtils.format(file.getString("prefix")) + StringUtils.format(message.get()));
     }
