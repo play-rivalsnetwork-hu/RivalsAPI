@@ -71,3 +71,15 @@ publishing {
         }
     }
 }
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.play-rivalsnetwork-hu'
+            artifactId = 'RivalsAPI'
+            version = '1.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
