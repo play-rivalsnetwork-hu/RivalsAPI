@@ -7,6 +7,7 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public abstract class Config {
     public Config(@NotNull JavaPlugin plugin, String name) {
         InputStream resource = plugin.getResource(name);
         if (resource == null) {
-            RivalsLogger.severe("Could not find {} in plugin {}''s resources! Please notify the authors of said plugin about this!", this.name, plugin.toString());
+            RivalsAPIPlugin.getApi().logger().severe("Could not find {} in plugin {}''s resources! Please notify the authors of said plugin about this!", this.name, plugin.toString());
             return;
         }
 
@@ -30,7 +31,7 @@ public abstract class Config {
             this.name = name;
             this.config = YamlDocument.create(plugin.getDataFolder().toPath().resolve(name).toFile(), resource, GeneralSettings.DEFAULT, LoaderSettings.DEFAULT, DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
         } catch (IOException exception) {
-            RivalsLogger.severe("An issue occured while loading config {}", this.name);
+            RivalsAPIPlugin.getApi().logger().severe("An issue occured while loading config {}", this.name);
         }
     }
 
@@ -42,7 +43,7 @@ public abstract class Config {
         try {
             this.config.reload();
         } catch (IOException exception) {
-            RivalsLogger.severe("An issue occured while reloading config {}", this.name);
+            RivalsAPIPlugin.getApi().logger().severe("An issue occured while reloading config {}", this.name);
         }
     }
 
@@ -50,7 +51,7 @@ public abstract class Config {
         try {
             this.config.reload();
         } catch (IOException exception) {
-            RivalsLogger.severe("An issue occured while saving config {}", this.name);
+            RivalsAPIPlugin.getApi().logger().severe("An issue occured while saving config {}", this.name);
         }
     }
 

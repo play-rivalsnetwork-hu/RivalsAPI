@@ -37,39 +37,38 @@ public class Storage {
     public Storage(@NotNull final RivalsAPIPlugin plugin) {
         Config configYML = RivalsAPIPlugin.getConfiguration();
 
-        if (!configYML.getHandle().getBoolean("mongodb")) {
-            config.setJdbcUrl(StringUtils.formatPlaceholders("jdbc:mysql://{}/{}",
+        config.setJdbcUrl(StringUtils.formatPlaceholders("jdbc:mysql://{}/{}",
                     configYML.getString("storage.address"),
                     configYML.getString("storage.database")
-            ));
-            config.setUsername(configYML.getString("storage.username"));
-            config.setPassword(configYML.getString("storage.password"));
-            config.addDataSourceProperty("cachePrepStmts", "true");
-            config.addDataSourceProperty("prepStmtCacheSize", "250");
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        ));
 
-            config.setPoolName(plugin.getName());
+        config.setUsername(configYML.getString("storage.username"));
+        config.setPassword(configYML.getString("storage.password"));
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-            config.setMaximumPoolSize(configYML.getInt("storage.pool-settings.maximum-pool-size"));
-            config.setMinimumIdle(configYML.getInt("storage.pool-settings.minimum-idle"));
-            config.setMaxLifetime(configYML.getInt("storage.pool-settings.maximum-lifetime"));
-            config.setKeepaliveTime(configYML.getInt("storage.pool-settings.keepalive-time"));
-            config.setConnectionTimeout(configYML.getInt("storage.pool-settings.connection-timeout"));
+        config.setPoolName(plugin.getName());
 
-            dataSource = new HikariDataSource(config);
-        } else {
-            ServerAddress address = new ServerAddress(configYML.getString("storage.address"), 27017);
-            MongoCredential credential = MongoCredential.createCredential(configYML.getString("storage.username"), configYML.getString("storage.database"), configYML.getString("storage.password").toCharArray());
-            MongoClientSettings settings = MongoClientSettings.builder()
-                    .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
-                    .credential(credential)
-                    .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(address))).build();
+        config.setMaximumPoolSize(configYML.getInt("storage.pool-settings.maximum-pool-size"));
+        config.setMinimumIdle(configYML.getInt("storage.pool-settings.minimum-idle"));
+        config.setMaxLifetime(configYML.getInt("storage.pool-settings.maximum-lifetime"));
+        config.setKeepaliveTime(configYML.getInt("storage.pool-settings.keepalive-time"));
+        config.setConnectionTimeout(configYML.getInt("storage.pool-settings.connection-timeout"));
 
-            client = MongoClients.create(settings);
-        }
+        dataSource = new HikariDataSource(config);
+
+        ServerAddress address = new ServerAddress(configYML.getString("storage.address"), 27017);
+        MongoCredential credential = MongoCredential.createCredential(configYML.getString("storage.username"), configYML.getString("storage.database"), configYML.getString("storage.password").toCharArray());
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+                .credential(credential)
+                .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(address))).build();
+
+        client = MongoClients.create(settings);
     }
 
-    public static void connect(@NotNull Callback callback) {
+    public static void sql(@NotNull Callback callback) {
         try (Connection connection = dataSource.getConnection()) {
             callback.accept(connection);
         } catch (SQLException exception) {

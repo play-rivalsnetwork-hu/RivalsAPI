@@ -8,22 +8,17 @@ import hu.rivalsnetwork.rivalsapi.users.User;
 
 import java.util.Map;
 
-public class RivalsAPICommand extends Command {
+public class RivalsAPICommand{
 
-    public RivalsAPICommand() {
-        super("rivalsapi");
-        registerableCommands.add(this);
-    }
-
-    @Override
-    public void register() {
+    @Command
+    public static void register() {
         new CommandTree("rivalsapi")
                 .withPermission("rivalsapi.command.main")
                 .then(new LiteralArgument("reload")
                         .withPermission("rivalsapi.command.reload")
                         .executes((sender, args) -> {
                             long start = System.currentTimeMillis();
-                            RivalsAPIPlugin.getInstance().lang().reload();
+                            RivalsAPIPlugin.lang().reload();
                             RivalsAPIPlugin.getConfiguration().reload();
                             RivalsAPIPlugin.getApi().messageUtils().sendLang(sender, "reload", Map.of("%time%", String.valueOf(System.currentTimeMillis() - start)));
                         })

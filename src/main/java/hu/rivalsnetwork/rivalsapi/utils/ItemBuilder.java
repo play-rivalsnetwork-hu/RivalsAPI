@@ -3,6 +3,7 @@ package hu.rivalsnetwork.rivalsapi.utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -82,7 +83,7 @@ public class ItemBuilder {
             try {
                 level = Integer.parseInt(enchant[1]);
             } catch (Exception exception) {
-                RivalsLogger.config("Not an integer! {}", enchant[0]);
+                RivalsAPIPlugin.getApi().logger().config("Not an integer! {}", enchant[0]);
                 continue;
             }
 
@@ -106,7 +107,7 @@ public class ItemBuilder {
             try {
                 itemFlag = ItemFlag.valueOf(flag.toUpperCase(Locale.ENGLISH));
             } catch (Exception exception) {
-                RivalsLogger.config("Invalid flag name {}!", flag);
+                RivalsAPIPlugin.getApi().logger().config("Invalid flag name {}!", flag);
                 continue;
             }
 

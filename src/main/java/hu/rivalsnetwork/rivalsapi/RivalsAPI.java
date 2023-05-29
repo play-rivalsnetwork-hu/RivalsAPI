@@ -4,6 +4,7 @@ import hu.rivalsnetwork.rivalsapi.serializer.impl.LocationSerializer;
 import hu.rivalsnetwork.rivalsapi.users.User;
 import hu.rivalsnetwork.rivalsapi.users.Users;
 import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
+import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.entity.Player;
 
@@ -18,7 +19,7 @@ public class RivalsAPI {
     public RivalsAPI(RivalsAPIPlugin plugin) {
         this.plugin = plugin;
         scheduler = new Scheduler(plugin);
-        messageUtils = new MessageUtils(plugin.lang().getHandle());
+        messageUtils = new MessageUtils(RivalsAPIPlugin.lang().getHandle());
     }
 
     public User getUser(UUID uuid) {
@@ -39,5 +40,9 @@ public class RivalsAPI {
 
     public MessageUtils messageUtils() {
         return messageUtils;
+    }
+
+    public RivalsLogger logger() {
+        return new RivalsLogger(plugin);
     }
 }

@@ -1,0 +1,41 @@
+package hu.rivalsnetwork.rivalsapi.plugin;
+
+import hu.rivalsnetwork.rivalsapi.RivalsAPI;
+import hu.rivalsnetwork.rivalsapi.serializer.impl.LocationSerializer;
+import hu.rivalsnetwork.rivalsapi.users.User;
+import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
+import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
+import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
+import org.bukkit.entity.Player;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
+
+public interface RivalsPlugin {
+
+    RivalsAPI getAPI();
+
+    void enable() throws InvocationTargetException, IllegalAccessException;
+
+    void load();
+
+    void disable();
+
+    void reload();
+
+    String reloadTime();
+
+    void loadCommands();
+
+    Scheduler scheduler();
+
+    MessageUtils messageUtils();
+
+    LocationSerializer locationSerializer();
+
+    User getUser(UUID uuid);
+
+    User getUser(Player player);
+
+    RivalsLogger logger();
+}

@@ -1,44 +1,50 @@
 package hu.rivalsnetwork.rivalsapi.utils;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import hu.rivalsnetwork.rivalsapi.plugin.RivalsPluginImpl;
+import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 public class RivalsLogger {
-    private static final Logger logger = Logger.getLogger("RivalsAPILogger");
+    private final String name;
 
-    public static void warn(String message, Object... args) {
-        logger.warning(StringUtils.formatPlaceholders(message, args));
+    public RivalsLogger(@NotNull RivalsPluginImpl plugin) {
+        name = plugin.getName();
     }
 
-    public static void info(String message, Object... args) {
-        logger.info(StringUtils.formatPlaceholders(message, args));
+    public void warn(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <yellow>WARN</yellow> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void severe(String message, Object... args) {
-        logger.severe(StringUtils.formatPlaceholders(message, args));
+    public void info(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>INFO</green> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void config(String message, Object... args) {
-        logger.config(StringUtils.formatPlaceholders(message, args));
+    public void severe(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <dark_red>SEVERE</dark_red> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void fine(String message, Object... args) {
-        logger.fine(StringUtils.formatPlaceholders(message, args));
+    public void config(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <gold>CONFIG</gold> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void finer(String message, Object... args) {
-        logger.finer(StringUtils.formatPlaceholders(message, args));
+
+    public void fine(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>FINE</green> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void finest(String message, Object... args) {
-        logger.finest(StringUtils.formatPlaceholders(message, args));
+    public void finer(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>FINER</green> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void all(String message, Object... args) {
-        logger.log(Level.ALL, StringUtils.formatPlaceholders(message, args));
+    public void finest(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>FINEST</green> " + StringUtils.formatPlaceholders(message, args)));
     }
 
-    public static void off(String message, Object... args) {
-        logger.log(Level.OFF, StringUtils.formatPlaceholders(message, args));
+    public void all(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>ALL</green> " + StringUtils.formatPlaceholders(message, args)));
+    }
+
+    public void off(String message, Object... args) {
+        Bukkit.getConsoleSender().sendMessage(StringUtils.format("[" + name + "] <green>OFF</green> " + StringUtils.formatPlaceholders(message, args)));
     }
 }
