@@ -45,14 +45,6 @@ public final class RivalsAPIPlugin extends RivalsPluginImpl {
         Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
     }
 
-//    public static Config getConfiguration() {
-//        return config;
-//    }
-//
-//    public static Config lang() {
-//        return lang;
-//    }
-
     public static RivalsAPI getApi() {
         return api;
     }
