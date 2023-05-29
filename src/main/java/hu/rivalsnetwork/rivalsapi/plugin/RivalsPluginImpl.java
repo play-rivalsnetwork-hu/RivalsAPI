@@ -3,6 +3,7 @@ package hu.rivalsnetwork.rivalsapi.plugin;
 import hu.rivalsnetwork.rivalsapi.RivalsAPI;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.commands.Command;
+import hu.rivalsnetwork.rivalsapi.config.Configuration;
 import hu.rivalsnetwork.rivalsapi.serializer.impl.LocationSerializer;
 import hu.rivalsnetwork.rivalsapi.users.User;
 import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
@@ -11,9 +12,13 @@ import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -28,15 +33,18 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         return RivalsAPIPlugin.getInstance().getAPI();
     }
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        scheduler = new Scheduler(this);
-        logger = new RivalsLogger(this);
-        logger().info("<white>Loading plugin <green>" + this.getName());
+    // Paper & Bukkit code - start
+    public static JavaPlugin getPlugin(@NotNull Class declaringClass) {
+        final ClassLoader cl = declaringClass.getClassLoader();
+        if (!(cl instanceof io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader configuredPluginClassLoader)) { // Paper
+            throw new IllegalArgumentException(declaringClass + " is not initialized by a " + io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader.class); // Paper
+        }
+        JavaPlugin plugin = configuredPluginClassLoader.getPlugin(); // Paper
+        if (plugin == null) {
+            throw new IllegalStateException("Cannot get plugin for " + declaringClass + " from a static initializer");
+        }
 
-        this.enable();
-        loadCommands();
+        return (JavaPlugin) declaringClass.cast(plugin);
     }
 
     @Override
@@ -78,10 +86,22 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     }
 
     @Override
+    public void onEnable() {
+        super.onEnable();
+        scheduler = new Scheduler(this);
+        logger = new RivalsLogger(this);
+        logger().info("<white>Loading plugin <green>" + this.getName());
+
+        loadConfigs();
+        this.enable();
+        loadCommands();
+    }
+
+    @Override
     public void loadCommands() {
-        Reflections reflections = new Reflections(getClassLoader(), new MethodAnnotationsScanner());
         long now = System.currentTimeMillis();
-        logger().info("<green>Loading commands...");
+        logger.info("<green>Loading commands...");
+        Reflections reflections = new Reflections(getClassLoader(), new MethodAnnotationsScanner());
 
         for (Method method : reflections.getMethodsAnnotatedWith(Command.class)) {
             try {
@@ -92,6 +112,31 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         }
 
         logger().info("<green>Loaded commands! <gray>Took <green>" + (System.currentTimeMillis() - now) + " <gray>ms!");
+    }
+
+    @Override
+    public void loadConfigs() {
+        long now = System.currentTimeMillis();
+        logger().info("<green>Loading configs...");
+        Reflections reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner());
+
+        for (Field field : reflections.getFieldsAnnotatedWith(Configuration.class)) {
+            Configuration config = field.getDeclaredAnnotation(Configuration.class);
+            try {
+                Object obj = getClassObject();
+                field.set(obj, new hu.rivalsnetwork.rivalsapi.config.Config(getPlugin(field.getDeclaringClass()), config.name() + config.configType().value) {
+                });
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        logger().info("<green>Loaded configs! <gray>Took <green>" + (System.currentTimeMillis() - now) + " <gray>ms!");
+    }
+    // Paper & Bukkit code - end
+
+    protected @Nullable Object getClassObject() {
+        return null;
     }
 
     @Override

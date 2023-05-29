@@ -19,7 +19,7 @@ public class RivalsAPI {
     public RivalsAPI(RivalsAPIPlugin plugin) {
         this.plugin = plugin;
         scheduler = new Scheduler(plugin);
-        messageUtils = new MessageUtils(RivalsAPIPlugin.lang().getHandle());
+        messageUtils = new MessageUtils(RivalsAPIPlugin.LANG.getHandle());
     }
 
     public User getUser(UUID uuid) {

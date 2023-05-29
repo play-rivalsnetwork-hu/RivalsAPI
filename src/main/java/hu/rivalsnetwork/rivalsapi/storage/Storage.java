@@ -35,7 +35,7 @@ public class Storage {
     private static MongoClient client;
 
     public Storage(@NotNull final RivalsAPIPlugin plugin) {
-        Config configYML = RivalsAPIPlugin.getConfiguration();
+        Config configYML = RivalsAPIPlugin.CONFIG;
 
         config.setJdbcUrl(StringUtils.formatPlaceholders("jdbc:mysql://{}/{}",
                     configYML.getString("storage.address"),
@@ -78,7 +78,7 @@ public class Storage {
 
     public static void mongo(@NotNull MongoCallback callback) {
         try {
-            callback.accept(client.getDatabase(RivalsAPIPlugin.getConfiguration().getString("storage.database")));
+            callback.accept(client.getDatabase(RivalsAPIPlugin.CONFIG.getString("storage.database")));
         } catch (MongoException exception) {
             exception.printStackTrace();
         }

@@ -22,9 +22,11 @@ public interface RivalsPlugin {
 
     void reload();
 
-    String reloadTime();
-
     void loadCommands();
+
+    void loadConfigs();
+
+    String reloadTime();
 
     Scheduler scheduler();
 

@@ -8,7 +8,6 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
-import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 

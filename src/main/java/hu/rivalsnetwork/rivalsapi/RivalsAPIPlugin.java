@@ -3,8 +3,8 @@ package hu.rivalsnetwork.rivalsapi;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import hu.rivalsnetwork.rivalsapi.config.Config;
-import hu.rivalsnetwork.rivalsapi.config.ConfigYML;
-import hu.rivalsnetwork.rivalsapi.config.LangYML;
+import hu.rivalsnetwork.rivalsapi.config.ConfigType;
+import hu.rivalsnetwork.rivalsapi.config.Configuration;
 import hu.rivalsnetwork.rivalsapi.gui.GuiClickListener;
 import hu.rivalsnetwork.rivalsapi.plugin.RivalsPluginImpl;
 import hu.rivalsnetwork.rivalsapi.storage.Storage;
@@ -14,8 +14,10 @@ import org.bukkit.Bukkit;
 public final class RivalsAPIPlugin extends RivalsPluginImpl {
     private static RivalsAPI api;
     private static RivalsAPIPlugin instance;
-    private static Config config;
-    private static Config lang;
+    @Configuration(configType = ConfigType.YAML, name = "config")
+    public static Config CONFIG = null;
+    @Configuration(configType = ConfigType.YAML, name = "lang")
+    public static Config LANG = null;
 
     public static RivalsAPIPlugin getInstance() {
         return instance;
@@ -35,8 +37,6 @@ public final class RivalsAPIPlugin extends RivalsPluginImpl {
     public void enable() {
         CommandAPI.onEnable();
         instance = this;
-        config = new ConfigYML();
-        lang = new LangYML();
         api = new RivalsAPI(this);
 
         new Storage(this);
@@ -45,13 +45,13 @@ public final class RivalsAPIPlugin extends RivalsPluginImpl {
         Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
     }
 
-    public static Config getConfiguration() {
-        return config;
-    }
-
-    public static Config lang() {
-        return lang;
-    }
+//    public static Config getConfiguration() {
+//        return config;
+//    }
+//
+//    public static Config lang() {
+//        return lang;
+//    }
 
     public static RivalsAPI getApi() {
         return api;

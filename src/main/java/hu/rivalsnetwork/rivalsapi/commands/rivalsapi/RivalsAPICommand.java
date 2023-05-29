@@ -18,8 +18,8 @@ public class RivalsAPICommand{
                         .withPermission("rivalsapi.command.reload")
                         .executes((sender, args) -> {
                             long start = System.currentTimeMillis();
-                            RivalsAPIPlugin.lang().reload();
-                            RivalsAPIPlugin.getConfiguration().reload();
+                            RivalsAPIPlugin.LANG.reload();
+                            RivalsAPIPlugin.CONFIG.reload();
                             RivalsAPIPlugin.getApi().messageUtils().sendLang(sender, "reload", Map.of("%time%", String.valueOf(System.currentTimeMillis() - start)));
                         })
                 )
