@@ -30,36 +30,40 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
 
     @Override
     public void onEnable() {
-        enable();
+        super.onEnable();
+        scheduler = new Scheduler(this);
+        logger = new RivalsLogger(this);
+        logger().info("<white>Loading plugin <green>" + this.getName());
+
+        this.enable();
+        loadCommands();
     }
 
     @Override
     public void enable() {
-        logger().info("<white>Loading plugin <green>" + this.getName());
-        scheduler = new Scheduler(this);
-        logger = new RivalsLogger(this);;
 
-        scheduler().runLater(this::loadCommands, 10L);
     }
 
     @Override
     public void load() {
-        super.onLoad();
+
     }
 
     @Override
     public void onLoad() {
+        super.onLoad();
         load();
     }
 
 
     @Override
     public void disable() {
-        super.onDisable();
+
     }
 
     @Override
     public void onDisable() {
+        super.onDisable();
         disable();
     }
 

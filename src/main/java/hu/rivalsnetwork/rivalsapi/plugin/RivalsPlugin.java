@@ -8,14 +8,13 @@ import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 public interface RivalsPlugin {
 
     RivalsAPI getAPI();
 
-    void enable() throws InvocationTargetException, IllegalAccessException;
+    void enable();
 
     void load();
 
