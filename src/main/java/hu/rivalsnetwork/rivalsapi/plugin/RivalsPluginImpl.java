@@ -34,18 +34,19 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     }
 
     // Paper & Bukkit code - start
-    public static JavaPlugin getPlugin(@NotNull Class declaringClass) {
-        final ClassLoader cl = declaringClass.getClassLoader();
+    public static JavaPlugin getPlugin(@NotNull Class clazz) {
+        final ClassLoader cl = clazz.getClassLoader();
         if (!(cl instanceof io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader configuredPluginClassLoader)) { // Paper
-            throw new IllegalArgumentException(declaringClass + " is not initialized by a " + io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader.class); // Paper
+            throw new IllegalArgumentException(clazz + " is not initialized by a " + io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader.class); // Paper
         }
         JavaPlugin plugin = configuredPluginClassLoader.getPlugin(); // Paper
         if (plugin == null) {
-            throw new IllegalStateException("Cannot get plugin for " + declaringClass + " from a static initializer");
+            throw new IllegalStateException("Cannot get plugin for " + clazz + " from a static initializer");
         }
 
-        return (JavaPlugin) declaringClass.cast(plugin);
+        return (JavaPlugin) clazz.cast(plugin);
     }
+    // Paper & Bukkit code - end
 
     @Override
     public void enable() {
@@ -133,7 +134,6 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
 
         logger().info("<green>Loaded configs! <gray>Took <green>" + (System.currentTimeMillis() - now) + " <gray>ms!");
     }
-    // Paper & Bukkit code - end
 
     protected @Nullable Object getClassObject() {
         return null;
