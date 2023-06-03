@@ -198,10 +198,9 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         throw new UnsupportedOperationException("Unsupported behaviour! Do not use the builtin config system!");
     }
 
-    @DoNotCall
     @Override
     public @NotNull Logger getLogger() {
-        throw new UnsupportedOperationException("Use RivalsPluginImpl#getLogger() that returns a RivalsLogger");
+        return super.getLogger();
     }
 
     @DoNotCall
