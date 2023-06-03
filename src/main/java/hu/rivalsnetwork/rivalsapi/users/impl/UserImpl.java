@@ -4,7 +4,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
-import com.viaversion.viaversion.api.Via;
 import hu.rivalsnetwork.rivalsapi.storage.Storage;
 import hu.rivalsnetwork.rivalsapi.users.Key;
 import hu.rivalsnetwork.rivalsapi.users.User;
@@ -25,7 +24,7 @@ public class UserImpl implements User {
 
     public UserImpl(@NotNull final Player player) {
         this.player = player;
-        version = Version.getVersionByID(Via.getAPI().getPlayerVersion(player.getUniqueId()));
+        version = Version.getVersionByID(player.getProtocolVersion());
     }
 
     @Override

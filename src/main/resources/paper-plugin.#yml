@@ -1,9 +1,0 @@
-name: RivalsAPI
-version: '0.1'
-main: hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin
-description: Paper Test Plugin
-api-version: '1.19'
-
-load-after:
-  - name: ViaVersion
-    bootstrap: false

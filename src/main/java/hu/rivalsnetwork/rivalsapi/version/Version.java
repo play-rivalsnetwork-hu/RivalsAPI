@@ -11,7 +11,8 @@ public enum Version {
     v1_18_1(757),
     v1_18(757),
     v1_17_1(756),
-    v1_17(755);
+    v1_17(755),
+    UNKNOWN(-1);
     static final HashMap<Integer, Version> versions = new HashMap<>();
     public final int versionNumber;
 

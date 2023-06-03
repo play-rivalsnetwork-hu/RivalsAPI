@@ -1,8 +1,5 @@
 name: RivalsAPI
-version: '0.1'
+version: '${version}'
 main: hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin
 description: RivalsAPI
 api-version: 1.19
-
-depend:
-  - PlaceholderAPI
