@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class Key {
+public final class Key {
     private final String namespace;
     private final Object value;
 
@@ -14,6 +14,8 @@ public class Key {
         this.value = value;
     }
 
+    @NotNull
+    @Contract(pure = true)
     public String toString() {
         return namespace + ":" + value;
     }
