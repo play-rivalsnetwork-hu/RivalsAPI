@@ -28,6 +28,5 @@ jobs:
     - name: Tag and create release
       uses: softprops/action-gh-release@v1
       with:
-        body: "${{ join(github.event.commits.*.message, '<br>') }}"
         tag_name: Build-v${{ github.run_number }}
         files: build/libs/RivalsAPI-${{ github.run_number }}.jar
