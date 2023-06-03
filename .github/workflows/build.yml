@@ -8,6 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -22,5 +23,11 @@ jobs:
     - name: artifact
       uses: actions/upload-artifact@v3   
       with:
-        name: RivalsAPI
-        path: build/libs/RivalsAPI-1.0-SNAPSHOT.jar
+        name: RivalsAPI-${{ github.run_number }}
+        path: build/libs/RivalsAPI-${{ github.run_number }}.jar
+    - name: Tag and create release
+      uses: softprops/action-gh-release@v1
+      with:
+        body: "${{ join(github.event.commits.*.message, '<br>') }}"
+        tag_name: Build-v${{ github.run_number }}
+        files: build/libs/RivalsAPI-${{ github.run_number }}.jar
