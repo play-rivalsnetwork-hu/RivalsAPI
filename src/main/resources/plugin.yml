@@ -1,6 +1,6 @@
 name: RivalsAPI
 version: '0.1'
-main: '${group}.RivalsAPIPlugin'
+main: 'hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin'
 description: RivalsAPI
 api-version: 1.19
 
