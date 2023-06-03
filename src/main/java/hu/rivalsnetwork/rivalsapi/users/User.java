@@ -13,4 +13,13 @@ public interface User {
     void sendActionbar(String message);
 
     void sendTitle(String title, String subTitle);
+
+    void write(Key key, Object filter, Object data, DataType dataType);
+
+    Object read(Key key, Object filter, DataType dataType);
+
+    enum DataType {
+        MYSQL,
+        MONGODB
+    }
 }

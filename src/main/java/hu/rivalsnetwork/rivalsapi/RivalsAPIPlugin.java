@@ -5,19 +5,17 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.config.ConfigType;
 import hu.rivalsnetwork.rivalsapi.config.Configuration;
-import hu.rivalsnetwork.rivalsapi.gui.GuiClickListener;
 import hu.rivalsnetwork.rivalsapi.plugin.RivalsPluginImpl;
 import hu.rivalsnetwork.rivalsapi.storage.Storage;
 import hu.rivalsnetwork.rivalsapi.users.Users;
-import org.bukkit.Bukkit;
 
 public final class RivalsAPIPlugin extends RivalsPluginImpl {
     private static RivalsAPI api;
     private static RivalsAPIPlugin instance;
     @Configuration(configType = ConfigType.YAML, name = "config")
-    public static Config CONFIG = null;
+    public static Config CONFIG;
     @Configuration(configType = ConfigType.YAML, name = "lang")
-    public static Config LANG = null;
+    public static Config LANG;
 
     public static RivalsAPIPlugin getInstance() {
         return instance;
@@ -42,7 +40,6 @@ public final class RivalsAPIPlugin extends RivalsPluginImpl {
         new Storage(this);
 
         Users.load();
-        Bukkit.getPluginManager().registerEvents(new GuiClickListener(), this);
     }
 
     public static RivalsAPI getApi() {
