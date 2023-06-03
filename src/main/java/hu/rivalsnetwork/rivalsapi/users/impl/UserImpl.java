@@ -65,8 +65,10 @@ public class UserImpl implements User {
                 for (Key data : keys) {
                     document.put(data.namespace(), data.value());
                 }
+                Document updateDocument = new Document();
+                updateDocument.put("$set", document);
 
-                collection.updateMany(filterDocument, document, new UpdateOptions().upsert(true));
+                collection.updateMany(filterDocument, updateDocument, new UpdateOptions().upsert(true));
             });
         } else {
             Storage.sql(connection -> {
