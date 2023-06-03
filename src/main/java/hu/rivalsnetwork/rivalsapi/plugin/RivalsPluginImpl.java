@@ -1,5 +1,6 @@
 package hu.rivalsnetwork.rivalsapi.plugin;
 
+import com.google.errorprone.annotations.DoNotCall;
 import hu.rivalsnetwork.rivalsapi.RivalsAPI;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
 import hu.rivalsnetwork.rivalsapi.commands.Command;
@@ -10,6 +11,7 @@ import hu.rivalsnetwork.rivalsapi.utils.MessageUtils;
 import hu.rivalsnetwork.rivalsapi.utils.RivalsLogger;
 import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -18,13 +20,13 @@ import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Logger;
 
 public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugin {
     private static Scheduler scheduler;
@@ -128,6 +130,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         Reflections reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner());
 
         for (Field field : reflections.getFieldsAnnotatedWith(Configuration.class)) {
+            field.setAccessible(true);
             Configuration config = field.getDeclaredAnnotation(Configuration.class);
             try {
                 Object obj = getClassObject();
@@ -182,5 +185,40 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     @Override
     public ScheduledThreadPoolExecutor executor() {
         return executor;
+    }
+
+    @Override
+    protected @NotNull File getFile() {
+        return super.getFile();
+    }
+
+    @DoNotCall
+    @Override
+    public @NotNull FileConfiguration getConfig() {
+        throw new UnsupportedOperationException("Unsupported behaviour! Do not use the builtin config system!");
+    }
+
+    @DoNotCall
+    @Override
+    public @NotNull Logger getLogger() {
+        throw new UnsupportedOperationException("Use RivalsPluginImpl#getLogger() that returns a RivalsLogger");
+    }
+
+    @DoNotCall
+    @Override
+    public void reloadConfig() {
+        throw new UnsupportedOperationException("Unsupported behaviour! Do not use the builtin config system!");
+    }
+
+    @DoNotCall
+    @Override
+    public void saveConfig() {
+        throw new UnsupportedOperationException("Unsupported behaviour! Do not use the builtin config system!");
+    }
+
+    @DoNotCall
+    @Override
+    public void saveDefaultConfig() {
+        throw new UnsupportedOperationException("Unsupported behaviour! Do not use the builtin config system!");
     }
 }
