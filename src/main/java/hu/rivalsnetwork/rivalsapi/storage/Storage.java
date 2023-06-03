@@ -36,39 +36,47 @@ public class Storage {
 
     public Storage(@NotNull final RivalsAPIPlugin plugin) {
         Config configYML = RivalsAPIPlugin.CONFIG;
+        if (configYML.getHandle().getBoolean("mysql")) {
 
-        config.setJdbcUrl(StringUtils.formatPlaceholders("jdbc:mysql://{}/{}",
+            config.setJdbcUrl(StringUtils.formatPlaceholders("jdbc:mysql://{}/{}",
                     configYML.getString("storage.address"),
                     configYML.getString("storage.database")
-        ));
+            ));
 
-        config.setUsername(configYML.getString("storage.username"));
-        config.setPassword(configYML.getString("storage.password"));
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            config.setUsername(configYML.getString("storage.username"));
+            config.setPassword(configYML.getString("storage.password"));
+            config.addDataSourceProperty("cachePrepStmts", "true");
+            config.addDataSourceProperty("prepStmtCacheSize", "250");
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-        config.setPoolName(plugin.getName());
+            config.setPoolName(plugin.getName());
 
-        config.setMaximumPoolSize(configYML.getInt("storage.pool-settings.maximum-pool-size"));
-        config.setMinimumIdle(configYML.getInt("storage.pool-settings.minimum-idle"));
-        config.setMaxLifetime(configYML.getInt("storage.pool-settings.maximum-lifetime"));
-        config.setKeepaliveTime(configYML.getInt("storage.pool-settings.keepalive-time"));
-        config.setConnectionTimeout(configYML.getInt("storage.pool-settings.connection-timeout"));
+            config.setMaximumPoolSize(configYML.getInt("storage.pool-settings.maximum-pool-size"));
+            config.setMinimumIdle(configYML.getInt("storage.pool-settings.minimum-idle"));
+            config.setMaxLifetime(configYML.getInt("storage.pool-settings.maximum-lifetime"));
+            config.setKeepaliveTime(configYML.getInt("storage.pool-settings.keepalive-time"));
+            config.setConnectionTimeout(configYML.getInt("storage.pool-settings.connection-timeout"));
 
-        dataSource = new HikariDataSource(config);
+            dataSource = new HikariDataSource(config);
+        }
 
-        ServerAddress address = new ServerAddress(configYML.getString("storage.address"), 27017);
-        MongoCredential credential = MongoCredential.createCredential(configYML.getString("storage.username"), configYML.getString("storage.database"), configYML.getString("storage.password").toCharArray());
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
-                .credential(credential)
-                .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(address))).build();
+        if (configYML.getHandle().getBoolean("mongodb")) {
+            ServerAddress address = new ServerAddress(configYML.getString("storage.address"), 27017);
+            MongoCredential credential = MongoCredential.createCredential(configYML.getString("storage.username"), configYML.getString("storage.database"), configYML.getString("storage.password").toCharArray());
+            MongoClientSettings settings = MongoClientSettings.builder()
+                    .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+                    .credential(credential)
+                    .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(address))).build();
 
-        client = MongoClients.create(settings);
+            client = MongoClients.create(settings);
+        }
     }
 
     public static void sql(@NotNull Callback callback) {
+        if (dataSource == null) {
+            throw new RuntimeException("MySQL/MariaDB was not enabled in config, yet it's still being used!");
+        }
+
         try (Connection connection = dataSource.getConnection()) {
             callback.accept(connection);
         } catch (SQLException exception) {
@@ -77,6 +85,10 @@ public class Storage {
     }
 
     public static void mongo(@NotNull MongoCallback callback) {
+        if (client == null) {
+            throw new RuntimeException("MongoDB was not enabled in config, yet it's still being used!");
+        }
+
         try {
             callback.accept(client.getDatabase(RivalsAPIPlugin.CONFIG.getString("storage.database")));
         } catch (MongoException exception) {

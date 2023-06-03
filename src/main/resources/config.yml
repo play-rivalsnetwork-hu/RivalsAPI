@@ -11,4 +11,5 @@ storage:
     connection-timeout: 5000
 
 mongodb: true
+mysql: true
 config-version: 2
