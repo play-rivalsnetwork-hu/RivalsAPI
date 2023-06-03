@@ -22,11 +22,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugin {
     private static Scheduler scheduler;
     private static final LocationSerializer serializer = new LocationSerializer();
     private static RivalsLogger logger;
+    private ScheduledThreadPoolExecutor executor = null;
 
     @Override
     public RivalsAPI getAPI() {
@@ -73,6 +77,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     @Override
     public void onDisable() {
         super.onDisable();
+        executor.shutdownNow();
         disable();
     }
 
@@ -89,6 +94,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     @Override
     public void onEnable() {
         super.onEnable();
+        executor = new ScheduledThreadPoolExecutor(3, task -> new Thread(task, "RivalsAPI-Executor-$name".replace("$name", this.getName())));
         scheduler = new Scheduler(this);
         logger = new RivalsLogger(this);
         logger().info("<white>Loading plugin <green>" + this.getName());
@@ -171,5 +177,10 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         this.reload();
 
         return String.valueOf(System.currentTimeMillis() - now);
+    }
+
+    @Override
+    public ScheduledThreadPoolExecutor executor() {
+        return executor;
     }
 }

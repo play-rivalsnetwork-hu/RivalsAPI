@@ -9,6 +9,8 @@ import hu.rivalsnetwork.rivalsapi.utils.Scheduler;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public interface RivalsPlugin {
 
@@ -39,4 +41,6 @@ public interface RivalsPlugin {
     User getUser(Player player);
 
     RivalsLogger logger();
+
+    ScheduledThreadPoolExecutor executor();
 }
