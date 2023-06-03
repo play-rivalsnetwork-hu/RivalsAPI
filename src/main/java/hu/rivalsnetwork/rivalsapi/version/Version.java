@@ -27,6 +27,7 @@ public enum Version {
     }
 
     public static Version getVersionByID(int id) {
-        return versions.get(id);
+        Version version = versions.get(id);
+        return version == null ? UNKNOWN : version;
     }
 }
