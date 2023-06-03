@@ -1,5 +1,11 @@
 name: RivalsAPI
 version: '${version}'
-main: hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin
+main: '${group}.RivalsAPIPlugin'
 description: RivalsAPI
 api-version: 1.19
+
+load-before:
+  - name: PlaceholderAPI
+    bootstrap: false
+
+has-open-classloader: true

@@ -40,6 +40,14 @@ repositories {
     }
 }
 
+processResources {
+    filesMatching(List.of('plugin.yml', 'paper-plugin.yml')) {
+        expand(
+                'version': buildNum,
+                'group': group
+        )
+    }
+}
 
 tasks {
     compileJava {
