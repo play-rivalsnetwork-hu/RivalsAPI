@@ -16,7 +16,7 @@ public interface User {
 
     void write(String key, DataType dataType, Key... keys);
 
-    Object read(Key key, DataType dataType)
+    Object read(Key key, DataType dataType);
 
     enum DataType {
         MYSQL,
