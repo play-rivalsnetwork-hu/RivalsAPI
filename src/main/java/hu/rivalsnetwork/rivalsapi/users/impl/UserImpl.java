@@ -11,12 +11,12 @@ import hu.rivalsnetwork.rivalsapi.utils.StringUtils;
 import hu.rivalsnetwork.rivalsapi.version.Version;
 import net.kyori.adventure.title.Title;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 
 public class UserImpl implements User {
     private final Player player;
@@ -54,41 +54,48 @@ public class UserImpl implements User {
         player.showTitle(titleImpl);
     }
 
-    @Override
-    public void write(Key key, Object filter, Object data, DataType dataType) {
+    public void write(String key, DataType dataType, Key... keys) {
         if (dataType == DataType.MONGODB) {
             Storage.mongo(database -> {
-                MongoCollection<Document> collection =  database.getCollection(key.namespace());
+                MongoCollection<Document> collection = database.getCollection(key);
+                Document filterDocument = new Document();
+                filterDocument.put("uuid", player.getUniqueId().toString());
 
-                Document filter2 = new Document();
-                filter2.put(key.namespace(), filter);
-                collection.updateMany(filter2, (Bson) data, new UpdateOptions().upsert(true));
+                Document document = new Document();
+                for (Key data : keys) {
+                    document.put(data.namespace(), data.value());
+                }
+
+                collection.updateMany(filterDocument, document, new UpdateOptions().upsert(true));
             });
         } else {
             Storage.sql(connection -> {
-                try (PreparedStatement statement = connection.prepareStatement(((String) data).replace("$key", key.namespace()).replace("$value", key.value()))) {
+                try (PreparedStatement statement = connection.prepareStatement(Arrays.stream(keys).findFirst().get().namespace())) {
                     statement.executeUpdate();
                 }
             });
         }
     }
 
-    public Object read(Key key, Object filter, DataType dataType) {
+    public Object read(Key key, DataType dataType) {
         Object[] result = {null};
         if (dataType == DataType.MONGODB) {
             Storage.mongo(database -> {
                 MongoCollection<Document> collection =  database.getCollection(key.namespace());
 
-                FindIterable<Document> cursor = collection.find((Bson) filter);
+                Document filter = new Document();
+                filter.put("uuid", player.getUniqueId().toString());
+                FindIterable<Document> cursor = collection.find(filter);
+
                 try (MongoCursor<Document> find = cursor.cursor()) {
                     if (find.hasNext()) {
-                        result[0] = find.next().get(key.value());
+                        result[0] = find.next().get((String) key.value());
                     }
                 }
             });
         } else {
             Storage.sql(connection -> {
-                try (PreparedStatement statement = connection.prepareStatement((String) filter)) {
+                try (PreparedStatement statement = connection.prepareStatement(key.namespace())) {
                     try (ResultSet resultSet = statement.executeQuery()) {
                         result[0] = resultSet;
                     }

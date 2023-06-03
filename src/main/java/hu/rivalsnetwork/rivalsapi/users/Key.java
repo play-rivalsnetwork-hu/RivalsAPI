@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class Key {
     private final String namespace;
-    private final String value;
+    private final Object value;
 
-    public Key(@NotNull final String namespace, @NotNull final String value) {
+    public Key(@NotNull final String namespace, @NotNull final Object value) {
         this.namespace = namespace;
         this.value = value;
     }
@@ -18,7 +18,7 @@ public class Key {
         return namespace + ":" + value;
     }
 
-    public String value() {
+    public Object value() {
         return value;
     }
 
@@ -28,7 +28,7 @@ public class Key {
 
     @NotNull
     @Contract(value = "_, _ -> new", pure = true)
-    public static Key of(@NotNull final String namespace, @NotNull final String value) {
+    public static Key of(@NotNull final String namespace, @NotNull final Object value) {
         return new Key(namespace, value);
     }
 

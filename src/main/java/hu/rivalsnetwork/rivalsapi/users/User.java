@@ -14,9 +14,9 @@ public interface User {
 
     void sendTitle(String title, String subTitle);
 
-    void write(Key key, Object filter, Object data, DataType dataType);
+    void write(String key, DataType dataType, Key... keys);
 
-    Object read(Key key, Object filter, DataType dataType);
+    Object read(Key key, DataType dataType)
 
     enum DataType {
         MYSQL,
