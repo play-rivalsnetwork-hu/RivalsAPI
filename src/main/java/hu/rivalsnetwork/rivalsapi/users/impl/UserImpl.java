@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class UserImpl implements User {
     private final Player player;
@@ -55,11 +57,19 @@ public class UserImpl implements User {
     }
 
     public void write(String key, DataType dataType, Key... keys) {
+        write(key, dataType, Collections.emptyList(), keys);
+    }
+
+    @Override
+    public void write(String key, DataType dataType, List<Key> filter, Key... keys) {
         if (dataType == DataType.MONGODB) {
             Storage.mongo(database -> {
                 MongoCollection<Document> collection = database.getCollection(key);
                 Document filterDocument = new Document();
                 filterDocument.put("uuid", player.getUniqueId().toString());
+                for (Key data : filter) {
+                    filterDocument.put(data.namespace(), data.value());
+                }
 
                 Document document = new Document();
                 for (Key data : keys) {
@@ -80,14 +90,22 @@ public class UserImpl implements User {
     }
 
     public Object read(Key key, DataType dataType) {
+        return read(key, dataType, Collections.emptyList());
+    }
+
+    @Override
+    public Object read(Key key, DataType dataType, List<Key> filter) {
         Object[] result = {null};
         if (dataType == DataType.MONGODB) {
             Storage.mongo(database -> {
                 MongoCollection<Document> collection =  database.getCollection(key.namespace());
+                Document filterDocument = new Document();
+                filterDocument.put("uuid", player.getUniqueId().toString());
+                for (Key data : filter) {
+                    filterDocument.put(data.namespace(), data.value());
+                }
 
-                Document filter = new Document();
-                filter.put("uuid", player.getUniqueId().toString());
-                FindIterable<Document> cursor = collection.find(filter);
+                FindIterable<Document> cursor = collection.find(filterDocument);
 
                 try (MongoCursor<Document> find = cursor.cursor()) {
                     if (find.hasNext()) {

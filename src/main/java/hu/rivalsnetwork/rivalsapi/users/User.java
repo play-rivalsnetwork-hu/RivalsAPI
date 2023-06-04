@@ -3,6 +3,8 @@ package hu.rivalsnetwork.rivalsapi.users;
 import hu.rivalsnetwork.rivalsapi.version.Version;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public interface User {
     Version getVersion();
 
@@ -16,7 +18,11 @@ public interface User {
 
     void write(String key, DataType dataType, Key... keys);
 
+    void write(String key, DataType dataType, List<Key> filter, Key... keys);
+
     Object read(Key key, DataType dataType);
+
+    Object read(Key key, DataType dataType, List<Key> filter);
 
     enum DataType {
         MYSQL,
