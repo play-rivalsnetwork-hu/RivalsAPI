@@ -125,4 +125,64 @@ public class UserImpl implements User {
 
         return result[0];
     }
+
+    @Override
+    public void delete(String key, DataType dataType) {
+        delete(key, dataType, Collections.emptyList());
+    }
+
+    @Override
+    public void delete(String key, DataType dataType, List<Key> filter) {
+        if (dataType == DataType.MONGODB) {
+            Storage.mongo(database -> {
+                MongoCollection<Document> collection = database.getCollection(key);
+                Document filterDocument = new Document();
+                filterDocument.put("uuid", player.getUniqueId().toString());
+                for (Key data : filter) {
+                    filterDocument.put(data.namespace(), data.value());
+                }
+
+                collection.deleteMany(filterDocument);
+            });
+        } else {
+            Storage.sql(connection -> {
+                try (PreparedStatement statement = connection.prepareStatement(key)) {
+                    statement.executeUpdate();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void remove(Key key, DataType dataType) {
+        remove(key, dataType, Collections.emptyList());
+    }
+
+    @Override
+    public void remove(Key key, DataType dataType, List<Key> filter) {
+        if (dataType == DataType.MONGODB) {
+            Storage.mongo(database -> {
+                MongoCollection<Document> collection = database.getCollection(key.namespace());
+                Document filterDocument = new Document();
+                filterDocument.put("uuid", player.getUniqueId().toString());
+                for (Key data : filter) {
+                    filterDocument.put(data.namespace(), data.value());
+                }
+
+                Document document = new Document();
+                document.put((String) key.value(), "");
+
+                Document updateDocument = new Document();
+                updateDocument.put("$unset", document);
+
+                collection.updateMany(filterDocument, updateDocument, new UpdateOptions().upsert(true));
+            });
+        } else {
+            Storage.sql(connection -> {
+                try (PreparedStatement statement = connection.prepareStatement(key.namespace())) {
+                    statement.executeUpdate();
+                }
+            });
+        }
+    }
 }

@@ -24,6 +24,14 @@ public interface User {
 
     Object read(Key key, DataType dataType, List<Key> filter);
 
+    void delete(String key, DataType dataType);
+
+    void delete(String key, DataType dataType, List<Key> filter);
+
+    void remove(Key key, DataType dataType);
+
+    void remove(Key key, DataType dataType, List<Key> filter);
+
     enum DataType {
         MYSQL,
         MONGODB
