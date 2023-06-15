@@ -1,24 +1,20 @@
 package hu.rivalsnetwork.rivalsapi.utils;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import hu.rivalsnetwork.rivalsapi.RivalsAPIPlugin;
+import hu.rivalsnetwork.rivalsapi.nms.NMSHandlers;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 public class ItemBuilder {
 
@@ -27,7 +23,7 @@ public class ItemBuilder {
         ItemStack item = new ItemStack(matchMaterial(section.getString("material")));
 
         section.getOptionalString("name").ifPresent(name -> setName(item, name));
-        section.getOptionalString("texture").ifPresent(texture -> setTexture(item, texture));
+        section.getOptionalString("texture").ifPresent(texture -> NMSHandlers.getHandler().setSkullTexture(item, texture));
         section.getOptionalStringList("lore").ifPresent(lore -> setLore(item, lore));
         section.getOptionalInt("amount").ifPresent(amount -> setAmount(item, amount));
         section.getOptionalInt("custom-model-data").ifPresent(data -> setCustomModelData(item, data));
@@ -35,20 +31,6 @@ public class ItemBuilder {
         section.getOptionalStringList("item-flags").ifPresent(flags -> applyItemFlags(item, getItemFlags(flags)));
 
         return item;
-    }
-
-    // https://www.spigotmc.org/threads/how-to-create-heads-with-custom-base64-texture.352562/
-    public static void setTexture(@NotNull ItemStack item, @NotNull String texture) {
-        if (!(item.getItemMeta() instanceof SkullMeta meta)) return;
-        GameProfile profile = new GameProfile(UUID.randomUUID(), "skulltexture");
-        profile.getProperties().put("texture", new Property("textures", texture));
-        try {
-            Field profileF = meta.getClass().getDeclaredField("profile");
-            profileF.setAccessible(true);
-            profileF.set(meta, profile);
-        } catch (Exception ignored) {}
-
-        item.setItemMeta(meta);
     }
 
     public static void setName(@NotNull ItemStack item, @NotNull String name) {

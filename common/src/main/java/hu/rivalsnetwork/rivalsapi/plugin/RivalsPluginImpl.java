@@ -24,6 +24,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     }
 
     // Paper & Bukkit code - start
-    public static JavaPlugin getPlugin(@NotNull Class clazz) {
+    public static JavaPlugin getPluginByClass(@NotNull Class<?> clazz) {
         final ClassLoader cl = clazz.getClassLoader();
         if (!(cl instanceof io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader configuredPluginClassLoader)) { // Paper
             throw new IllegalArgumentException(clazz + " is not initialized by a " + io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader.class); // Paper
@@ -111,8 +112,10 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
         long now = System.currentTimeMillis();
         logger.info("<green>Loading commands...");
         Reflections reflections = new Reflections(getClassLoader(), new MethodAnnotationsScanner());
+        Set<Method> methods = reflections.getMethodsAnnotatedWith(Command.class);
 
-        for (Method method : reflections.getMethodsAnnotatedWith(Command.class)) {
+
+        for (Method method : methods) {
             try {
                 method.invoke(null);
             } catch (IllegalAccessException | InvocationTargetException e) {
@@ -127,14 +130,16 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     public void loadConfigs() {
         long now = System.currentTimeMillis();
         logger().info("<green>Loading configs...");
-        Reflections reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner());
 
-        for (Field field : reflections.getFieldsAnnotatedWith(Configuration.class)) {
+        Reflections reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner());
+        Set<Field> fields = reflections.getFieldsAnnotatedWith(Configuration.class);
+
+        for (Field field : fields) {
             field.setAccessible(true);
             Configuration config = field.getDeclaredAnnotation(Configuration.class);
             try {
                 Object obj = getClassObject();
-                field.set(obj, new hu.rivalsnetwork.rivalsapi.config.Config(getPlugin(field.getDeclaringClass()), config.name() + config.configType().value) {
+                field.set(obj, new hu.rivalsnetwork.rivalsapi.config.Config(getPluginByClass(field.getDeclaringClass()), config.name() + config.configType().value) {
                 });
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

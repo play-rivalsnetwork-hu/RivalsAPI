@@ -5,6 +5,7 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import hu.rivalsnetwork.rivalsapi.config.Config;
 import hu.rivalsnetwork.rivalsapi.config.ConfigType;
 import hu.rivalsnetwork.rivalsapi.config.Configuration;
+import hu.rivalsnetwork.rivalsapi.nms.NMSHandlers;
 import hu.rivalsnetwork.rivalsapi.plugin.RivalsPluginImpl;
 import hu.rivalsnetwork.rivalsapi.storage.Storage;
 import hu.rivalsnetwork.rivalsapi.users.Users;
@@ -33,8 +34,9 @@ public final class RivalsAPIPlugin extends RivalsPluginImpl {
 
     @Override
     public void enable() {
-        CommandAPI.onEnable();
         instance = this;
+        NMSHandlers.initialize();
+        CommandAPI.onEnable();
         api = new RivalsAPI(this);
 
         new Storage(this);

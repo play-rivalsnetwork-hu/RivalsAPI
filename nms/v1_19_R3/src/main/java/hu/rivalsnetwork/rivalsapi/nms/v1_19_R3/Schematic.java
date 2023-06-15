@@ -1,4 +1,4 @@
-package hu.rivalsnetwork.rivalsapi.schematic;
+package hu.rivalsnetwork.rivalsapi.nms.v1_19_R3;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +19,7 @@ import java.io.FileInputStream;
 import java.util.Map;
 
 // Thanks to: https://www.spigotmc.org/threads/loading-pasting-schematics-without-worldedit.543692/
-public class Schematic {
+public class Schematic implements hu.rivalsnetwork.rivalsapi.schematic.Schematic {
     private short width;
     private short height;
     private short length;
@@ -40,7 +40,8 @@ public class Schematic {
         }
     }
 
-    public void paste(@NotNull final Location location, boolean setAir) {
+    @Override
+    public void paste(@NotNull Location location, boolean setAir) {
         int mutatedX;
         int mutatedY;
         int mutatedZ;
@@ -68,6 +69,7 @@ public class Schematic {
         }
     }
 
+    @Override
     public void setBlock(@NotNull World world, int x, int y, int z, BlockData blockData) {
         CraftWorld craftWorld = ((CraftWorld) world);
         craftWorld.getChunkAtAsync(x >> 4, z >> 4).thenAccept(chunk -> {
