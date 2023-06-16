@@ -27,7 +27,7 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
 
     @Override
     public void name(Component name) {
-        setDisplayTag(parent.getOrCreateTag(), "display-name", StringTag.valueOf(net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(name)));
+        setDisplayTag(parent.getOrCreateTag(), "Name", StringTag.valueOf(net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(name)));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
         if (parentTag.contains(DISPLAY_TAG)) {
             CompoundTag display = parentTag.getCompound(DISPLAY_TAG);
 
-            if (display.contains("display-name")) {
+            if (display.contains("Name")) {
                 return net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(display.getString("name"));
             }
         }
@@ -54,7 +54,7 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
             tag.add(StringTag.valueOf(jsonLore.get(i)));
         }
 
-        setDisplayTag(parent.getOrCreateTag(), "lore", tag);
+        setDisplayTag(parent.getOrCreateTag(), "Lore", tag);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
 
         if (parentTag.contains(DISPLAY_TAG)) {
             CompoundTag display = parentTag.getCompound(DISPLAY_TAG);
-            if (!display.contains("lore")) return Collections.emptyList();
+            if (!display.contains("Lore")) return Collections.emptyList();
 
-            ListTag list = display.getList("lore", CraftMagicNumbers.NBT.TAG_STRING);
+            ListTag list = display.getList("Lore", CraftMagicNumbers.NBT.TAG_STRING);
             ArrayList<String> lore = new ArrayList<>(list.size());
             for (int index = 0; index < list.size(); index++) {
                 String line = list.getString(index);
