@@ -1,9 +1,14 @@
 package hu.rivalsnetwork.rivalsapi.items;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface ItemStack {
 
@@ -17,7 +22,29 @@ public interface ItemStack {
 
     void setAmount(int amount);
 
-    void setPersistentDataKey(String key, PersistentDataType<?, ?> type);
+    void setCustomModelData(int data);
+
+    int getCustomModelData();
+
+    void setType(Material type);
+
+    int getAmount();
+
+    Map<Enchantment, Integer> getEnchantments();
+
+    int getEnchantmentLevel(Enchantment enchantment);
+
+    void addItemFlags(ItemFlag... itemFlags);
+
+    void removeItemFlags(ItemFlag... itemFlags);
+
+    Set<ItemFlag> getItemFlags();
+
+    boolean hasItemFlag(ItemFlag itemFlag);
+
+    PersistentDataContainer getPersistentDataContainer();
 
     org.bukkit.inventory.ItemStack asBukkitStack();
+
+    boolean isSimilar(ItemStack item);
 }

@@ -1,5 +1,6 @@
 package hu.rivalsnetwork.rivalsapi.users;
 
+import hu.rivalsnetwork.rivalsapi.items.ItemStack;
 import hu.rivalsnetwork.rivalsapi.version.Version;
 import org.bukkit.entity.Player;
 
@@ -31,6 +32,8 @@ public interface User {
     void remove(Key key, DataType dataType);
 
     void remove(Key key, DataType dataType, List<Key> filter);
+
+    void addItem(ItemStack... itemStack);
 
     enum DataType {
         MYSQL,

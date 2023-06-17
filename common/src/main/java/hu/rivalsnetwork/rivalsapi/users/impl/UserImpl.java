@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
+import hu.rivalsnetwork.rivalsapi.items.ItemStack;
 import hu.rivalsnetwork.rivalsapi.storage.Storage;
 import hu.rivalsnetwork.rivalsapi.users.Key;
 import hu.rivalsnetwork.rivalsapi.users.User;
@@ -18,7 +19,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserImpl implements User {
     private final Player player;
@@ -184,5 +187,12 @@ public class UserImpl implements User {
                 }
             });
         }
+    }
+
+    @Override
+    public void addItem(ItemStack... itemStack) {
+        HashMap<Integer, org.bukkit.inventory.ItemStack> remaining = player.getInventory().addItem((org.bukkit.inventory.ItemStack) Arrays.stream(itemStack).map(ItemStack::asBukkitStack).collect(Collectors.toList()));
+
+        remaining.forEach((slot, item) -> player.getWorld().dropItem(player.getLocation(), item, items -> items.setOwner(player.getUniqueId())));
     }
 }

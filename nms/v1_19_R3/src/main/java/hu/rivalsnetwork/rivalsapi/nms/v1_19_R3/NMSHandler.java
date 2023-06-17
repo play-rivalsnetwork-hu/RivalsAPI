@@ -6,6 +6,7 @@ import hu.rivalsnetwork.rivalsapi.items.ItemStack;
 import hu.rivalsnetwork.rivalsapi.nms.PacketEntity;
 import hu.rivalsnetwork.rivalsapi.schematic.Schematic;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,11 @@ public class NMSHandler implements hu.rivalsnetwork.rivalsapi.nms.NMSHandler {
     @Override
     public ItemStack wrapItemStack(org.bukkit.inventory.ItemStack itemStack) {
         return new hu.rivalsnetwork.rivalsapi.nms.v1_19_R3.ItemStack(itemStack);
+    }
+
+    @Override
+    public ItemStack createItemStack(Material material) {
+        return new hu.rivalsnetwork.rivalsapi.nms.v1_19_R3.ItemStack(new org.bukkit.inventory.ItemStack(material));
     }
 
     @Override
