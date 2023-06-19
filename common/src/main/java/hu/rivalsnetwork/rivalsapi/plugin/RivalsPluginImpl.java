@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.util.FilterBuilder;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -34,6 +35,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     private static final LocationSerializer serializer = new LocationSerializer();
     private static RivalsLogger logger;
     private ScheduledThreadPoolExecutor executor = null;
+    private Reflections reflections;
 
     @Override
     public RivalsAPI getAPI() {
@@ -96,6 +98,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
 
     @Override
     public void onEnable() {
+        this.reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner(), new MethodAnnotationsScanner(), new FilterBuilder.Include(FilterBuilder.prefix(this.getClass().getPackageName())));
         super.onEnable();
         executor = new ScheduledThreadPoolExecutor(3, task -> new Thread(task, "RivalsAPI-Executor-$name".replace("$name", this.getName())));
         scheduler = new Scheduler(this);
@@ -111,9 +114,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
     public void loadCommands() {
         long now = System.currentTimeMillis();
         logger.info("<green>Loading commands...");
-        Reflections reflections = new Reflections(getClassLoader(), new MethodAnnotationsScanner());
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(Command.class);
-
+        Set<Method> methods = this.reflections.getMethodsAnnotatedWith(Command.class);
 
         for (Method method : methods) {
             try {
@@ -123,16 +124,14 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
             }
         }
 
-        logger().info("<green>Loaded commands! <gray>Took <green>" + (System.currentTimeMillis() - now) + " <gray>ms!");
+        logger().info("<green>Loaded <white>{}</white> commands! <gray>Took</gray> {} <gray>ms!</gray>", methods.size(), (System.currentTimeMillis() - now));
     }
 
     @Override
     public void loadConfigs() {
         long now = System.currentTimeMillis();
         logger().info("<green>Loading configs...");
-
-        Reflections reflections = new Reflections(getClassLoader(), new FieldAnnotationsScanner());
-        Set<Field> fields = reflections.getFieldsAnnotatedWith(Configuration.class);
+        Set<Field> fields = this.reflections.getFieldsAnnotatedWith(Configuration.class);
 
         for (Field field : fields) {
             field.setAccessible(true);
@@ -146,7 +145,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
             }
         }
 
-        logger().info("<green>Loaded configs! <gray>Took <green>" + (System.currentTimeMillis() - now) + " <gray>ms!");
+        logger().info("<green>Loaded <white>{}</white> configs! <gray>Took</gray> {} <gray>ms!</gray>\"", fields.size(), (System.currentTimeMillis() - now));
     }
 
     protected @Nullable Object getClassObject() {
