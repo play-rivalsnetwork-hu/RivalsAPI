@@ -145,7 +145,7 @@ public abstract class RivalsPluginImpl extends JavaPlugin implements RivalsPlugi
             }
         }
 
-        logger().info("<green>Loaded <white>{}</white> configs! <gray>Took</gray> {} <gray>ms!</gray>\"", fields.size(), (System.currentTimeMillis() - now));
+        logger().info("<green>Loaded <white>{}</white> configs! <gray>Took</gray> {} <gray>ms!</gray>", fields.size(), (System.currentTimeMillis() - now));
     }
 
     protected @Nullable Object getClassObject() {
