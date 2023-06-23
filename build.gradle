@@ -65,7 +65,7 @@ allprojects {
             exclude group: 'org.yaml', module: 'snakeyaml'
         }
 
-        implementation("me.clip:placeholderapi:2.11.3")
+        compileOnly("me.clip:placeholderapi:2.11.3")
         implementation("com.zaxxer:HikariCP:5.0.1")
         implementation("dev.jorel:commandapi-bukkit-shade:9.0.3")
         implementation("org.mongodb:mongodb-driver-sync:4.9.1")
@@ -93,6 +93,7 @@ processResources {
 }
 
 shadowJar {
+    exclude("me.clip:placeholderapi")
     archiveFileName.set("RivalsAPI-${buildNum}.jar")
 }
 
