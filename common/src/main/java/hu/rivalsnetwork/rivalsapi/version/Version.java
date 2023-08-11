@@ -3,6 +3,7 @@ package hu.rivalsnetwork.rivalsapi.version;
 import java.util.HashMap;
 
 public enum Version {
+    v1_20(763),
     v1_19_4(762),
     v1_19_3(761),
     v1_19_2(760),

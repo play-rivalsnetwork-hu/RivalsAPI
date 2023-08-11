@@ -47,4 +47,12 @@ public interface ItemStack {
     org.bukkit.inventory.ItemStack asBukkitStack();
 
     boolean isSimilar(ItemStack item);
+
+    void addNBT(String key, Object value);
+
+    boolean hasNBT(String key);
+
+    Object get(String key);
+
+    void removeNBT(String key);
 }

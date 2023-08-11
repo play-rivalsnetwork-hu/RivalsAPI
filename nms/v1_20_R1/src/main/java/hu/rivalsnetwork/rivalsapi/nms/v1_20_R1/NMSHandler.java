@@ -2,6 +2,7 @@ package hu.rivalsnetwork.rivalsapi.nms.v1_20_R1;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import hu.rivalsnetwork.rivalsapi.hologram.Hologram;
 import hu.rivalsnetwork.rivalsapi.items.ItemStack;
 import hu.rivalsnetwork.rivalsapi.nms.PacketEntity;
 import hu.rivalsnetwork.rivalsapi.schematic.Schematic;
@@ -49,5 +50,10 @@ public class NMSHandler implements hu.rivalsnetwork.rivalsapi.nms.NMSHandler {
     @Override
     public Schematic getSchematic(@NotNull File file) {
         return new hu.rivalsnetwork.rivalsapi.nms.v1_20_R1.Schematic(file);
+    }
+
+    @Override
+    public Hologram createHologram(Location location, String id, double lineHeight) {
+        return new hu.rivalsnetwork.rivalsapi.nms.v1_20_R1.Hologram(location, id, lineHeight);
     }
 }

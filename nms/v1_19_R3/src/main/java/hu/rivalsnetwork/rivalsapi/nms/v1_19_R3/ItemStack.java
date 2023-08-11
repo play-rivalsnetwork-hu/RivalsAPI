@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
@@ -240,6 +241,34 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
     }
 
     @Override
+    public void addNBT(String key, Object value) {
+        if (value instanceof String str) {
+            this.parent.getOrCreateTag().putString(key, str);
+        } else if (value instanceof Integer integer) {
+            this.parent.getOrCreateTag().putInt(key, integer);
+        } else if (value instanceof Double doubleValue) {
+            this.parent.getOrCreateTag().putDouble(key, doubleValue);
+        } else if (value instanceof CompoundTag tag) {
+            this.parent.getOrCreateTag().put(key, tag);
+        }
+    }
+
+    @Override
+    public Object get(String key) {
+        return this.parent.getOrCreateTag().get(key);
+    }
+
+    @Override
+    public boolean hasNBT(String key) {
+        return this.parent.getOrCreateTag().contains(key);
+    }
+
+    @Override
+    public void removeNBT(String key) {
+        this.parent.getOrCreateTag().remove(key);
+    }
+
+    @Override
     public int hashCode() {
         int hash = 1;
 
@@ -252,5 +281,14 @@ public class ItemStack implements hu.rivalsnetwork.rivalsapi.items.ItemStack {
         hash = hash * 31 + this.getItemFlags().size();
 
         return hash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemStack itemStack1)) return false;
+
+        if (!Objects.equals(parent, itemStack1.parent)) return false;
+        return Objects.equals(itemStack, itemStack1.itemStack);
     }
 }

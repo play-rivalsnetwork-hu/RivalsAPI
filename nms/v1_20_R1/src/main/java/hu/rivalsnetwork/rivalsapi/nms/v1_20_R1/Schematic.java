@@ -1,6 +1,6 @@
 package hu.rivalsnetwork.rivalsapi.nms.v1_20_R1;
 
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -34,7 +34,7 @@ public class Schematic implements hu.rivalsnetwork.rivalsapi.schematic.Schematic
     private short length;
     private Map<String, Tag> palette;
     private byte[] blockData;
-    final ObjectArraySet<ChunkPos> chunks = new ObjectArraySet<>(10000);
+    private final ObjectLinkedOpenHashSet<ChunkPos> positions = new ObjectLinkedOpenHashSet<>(1024);
 
     public Schematic(@NotNull final File file) {
         try (FileInputStream stream = new FileInputStream(file)) {
@@ -79,9 +79,11 @@ public class Schematic implements hu.rivalsnetwork.rivalsapi.schematic.Schematic
         }
 
         CraftWorld craftWorld = (CraftWorld) location.getWorld();
-        for (ChunkPos chunk : chunks) {
+        for (ChunkPos chunk : positions) {
             sendUpdatePackets(craftWorld, chunk);
         }
+
+        positions.trim();
     }
 
     @Override
@@ -100,7 +102,7 @@ public class Schematic implements hu.rivalsnetwork.rivalsapi.schematic.Schematic
             return;
         }
 
-        chunks.add(chunk.getPos());
+        positions.add(chunk.getPos());
         int j = pos.getX() & 15;
         int k = i & 15;
         int l = pos.getZ() & 15;
