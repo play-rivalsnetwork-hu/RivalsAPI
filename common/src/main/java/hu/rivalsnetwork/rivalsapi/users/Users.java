@@ -5,14 +5,16 @@ import hu.rivalsnetwork.rivalsapi.users.impl.UserImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Users {
     private static final HashMap<UUID, User> USERS = new HashMap<>();
@@ -41,9 +43,11 @@ public class Users {
 
     public static void load() {
         Bukkit.getPluginManager().registerEvents(new Listener() {
-            @EventHandler
-            public void onPlayerJoinEvent(@NotNull final PlayerJoinEvent event) {
-                addUser(new UserImpl(event.getPlayer()));
+            @EventHandler(priority = EventPriority.LOWEST)
+            public void onPlayerJoinEvent(@NotNull final PlayerSpawnLocationEvent event) {
+                RivalsAPIPlugin.getInstance().executor().schedule(() -> {
+                    addUser(new UserImpl(event.getPlayer()));
+                }, 5, TimeUnit.MILLISECONDS);
             }
 
             @EventHandler
